@@ -40,12 +40,12 @@ st.markdown("""
 
 uploaded_file = st.file_uploader("📁 Upload your CSV file", type=["csv"])
 
-# ✅ تنظيف البيانات + إزالة القيم الشاذة داخل نفس الدالة
+# ✅ clean the data and remove outliers
 def clean_data_with_report(df, threshold=0.7):
     total_rows = df.shape[0]
     report = []
 
-    # تنظيف البيانات
+    # clean the data
     for col in df.columns:
         missing_ratio = df[col].isnull().sum() / total_rows
         if missing_ratio > threshold:
@@ -61,7 +61,7 @@ def clean_data_with_report(df, threshold=0.7):
                 df[col].fillna(fill_value, inplace=True)
                 report.append(f"🔵 Filled numeric column '{col}' with mean: {fill_value:.2f}")
 
-    # إزالة outliers
+    # remove outliers
     numeric_cols = df.select_dtypes(include='number').columns
     for col in numeric_cols:
         Q1 = df[col].quantile(0.25)
@@ -109,7 +109,7 @@ def plot_regression_plots(df, title="Regression Plots"):
                 plt.tight_layout()
                 st.pyplot(fig)
 
-# واجهة التطبيق
+# Application Interface
 if uploaded_file:
     df = pd.read_csv(uploaded_file)
     st.subheader("🧾 Preview of the First 5 Rows")
